@@ -1,0 +1,14 @@
+/node_modules
+/vendor
+/.idea
+/.vagrant
+/.vscode
+composer.lock
+npm-debug.log
+yarn-error.log
+package-lock.json
+.env
+.env.test
+_ide_helper.php
+.DS_Store
+.php_cs.cach

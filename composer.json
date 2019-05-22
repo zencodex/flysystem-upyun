@@ -1,0 +1,25 @@
+{
+    "name": "zencodex/flysystem-upyun",
+    "description": "Upyun flysystem adapter",
+    "keywords": ["flysystem", "upyun", "又拍云"],
+    "require": {
+        "upyun/sdk": "^3.3",
+        "league/flysystem": "^1.0"
+    },
+    "support": {
+        "issues": "https://github.com/zencodex/flysystem-upyun/issues",
+        "source": "https://github.com/zencodex/flysystem-upyun"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "扣丁禅师",
+            "email": "v@yinqisen.cn"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ZenCodex\\Support\\Flysystem\\": "src/"
+        }
+    }
+}
