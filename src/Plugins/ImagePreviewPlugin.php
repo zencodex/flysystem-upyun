@@ -1,6 +1,6 @@
 <?php
 
-namespace ZenCodex\Support\Flysystem\Plugin;
+namespace ZenCodex\Support\Flysystem\Plugins;
 
 use League\Flysystem\Plugin\AbstractPlugin;
 

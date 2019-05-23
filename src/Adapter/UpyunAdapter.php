@@ -10,7 +10,7 @@ namespace ZenCodex\Support\Flysystem\Adapter;
  * 1. 这个包封装的主要目的是给 ZComposer 镜像远程存储使用，如果又拍云接口规则变动，利于快速修复
  * 2. ZComposer 镜像每天在又拍云里维护和同步上百万个文件，对接口调用的要求更为苛刻
  *    如最近刚修复的因upyun/php-sdk并行上传，触发又拍云同名文件上传间隔检测问题，解决方法强制 $config->uploadType = 'BLOCK'
- * 3. ZComposer 需要更多的自定义配置，见 $this->client 中的 config
+ * 3. ZComposer 需要更多的自定义配置，所以灵活性做了重构，见 $this->getClientHandler
  * 
  * ZComposer 镜像已经开源，如果有兴趣可以访问 <https://github.com/zencodex/composer-mirror>
  */
@@ -32,25 +32,25 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function __construct($config)
     {
-        $this->config = $config;
+        $this->config = (object)$config;
 
-        if (!isset($config->domain)) {
+        if (!isset($this->config->domain)) {
             $this->config->domain = '';
         }
 
-        if (!isset($config->protocol)) {
+        if (!isset($this->config->protocol)) {
             $this->config->protocol = 'https';
         }
 
-        if (!isset($config->timeout)) {
+        if (!isset($this->config->timeout)) {
             $this->config->timeout = 600;
         }
 
-        if (!isset($config->uploadType)) {
+        if (!isset($this->config->uploadType)) {
             $this->config->uploadType = 'AUTO';
         }
 
-        if (!isset($config->sizeBoundary)) {
+        if (!isset($this->config->sizeBoundary)) {
             $this->config->sizeBoundary = 121457280;
         }
     }
@@ -63,7 +63,7 @@ class UpyunAdapter extends AbstractAdapter
     public function write($path, $contents, Config $config)
     {
         try {
-            $this->client()->write($path, $contents);
+            $this->getClientHandler()->write($path, $contents);
             return $path;
         } catch (\Exception $e) {
             return [];
@@ -78,7 +78,7 @@ class UpyunAdapter extends AbstractAdapter
     public function writeStream($path, $resource, Config $config)
     {
         try {
-            $this->client()->write($path, $resource);
+            $this->getClientHandler()->write($path, $resource);
             return $path;
         } catch (\Exception $e) {
             return [];
@@ -130,7 +130,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function delete($path)
     {
-        return $this->client()->delete($path);
+        return $this->getClientHandler()->delete($path);
     }
 
     /**
@@ -138,7 +138,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
-        return $this->client()->deleteDir($dirname);
+        return $this->getClientHandler()->deleteDir($dirname);
     }
 
     /**
@@ -147,7 +147,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
-        return $this->client()->createDir($dirname);
+        return $this->getClientHandler()->createDir($dirname);
     }
 
     /**
@@ -164,7 +164,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function has($path)
     {
-        return $this->client()->has($path);
+        return $this->getClientHandler()->has($path);
     }
 
     /**
@@ -193,7 +193,7 @@ class UpyunAdapter extends AbstractAdapter
     {
         $list = [];
 
-        $result = $this->client()->read($directory, null, [ 'X-List-Limit' => 100, 'X-List-Iter' => null]);
+        $result = $this->getClientHandler()->read($directory, null, [ 'X-List-Limit' => 100, 'X-List-Iter' => null]);
 
         foreach ($result['files'] as $files) {
             $list[] = $this->normalizeFileInfo($files, $directory);
@@ -207,7 +207,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getMetadata($path)
     {
-        return $this->client()->info($path);
+        return $this->getClientHandler()->info($path);
     }
 
     /**
@@ -270,15 +270,21 @@ class UpyunAdapter extends AbstractAdapter
     }
 
     /**
-     * @return Upyun
+     * 方便暴露一些没有封装的方法调用
+     * @param array $configMore
+     * @return void
      */
-    protected function client()
+    public function getClientHandler($configMore = [])
     {
         $config = new \Upyun\Config($this->config->bucket, $this->config->operator, $this->config->password);
         $config->useSsl = $this->config->protocol === 'https' ? true : false;
         $config->timeout = $this->config->timeout;
         $config->sizeBoundary = $this->config->sizeBoundary;
         $config->uploadType = $this->config->uploadType;
+
+        foreach ($configMore as $key => $value) {
+            $config->$key = $value;
+        }
         return new Upyun($config);
     }
 
