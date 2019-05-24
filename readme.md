@@ -9,7 +9,7 @@
  *    如最近刚修复的因upyun/php-sdk并行上传，触发又拍云同名文件上传间隔检测问题，解决方法强制 $config->uploadType = 'BLOCK'
  * 3. ZComposer 需要更多的自定义配置，所以灵活性做了重构，见 $this->getClientHandler
  * 
- * ZComposer 镜像已经开源，如果有兴趣可以访问 [https://github.com/zencodex/composer-mirror](https://github.com/zencodex/composer-mirror)
+ * ZComposer 镜像已经开源，如果有兴趣可以访问 https://github.com/zencodex/composer-mirror
  */
 ```
 
