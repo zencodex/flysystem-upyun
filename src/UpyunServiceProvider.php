@@ -7,7 +7,7 @@ use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use ZenCodex\Support\Flysystem\Adapter\UpyunAdapter;
-use ZenCodex\Support\Flysystem\Plugin\ImagePreviewPlugin;
+use ZenCodex\Support\Flysystem\Plugins\ImagePreviewPlugin;
 
 class UpyunServiceProvider extends ServiceProvider
 {

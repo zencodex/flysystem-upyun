@@ -45,7 +45,7 @@ $config => [
 $adapter = new UpyunAdapter($config);
 // 针对云盘操作，建议添加 disable_asserts
 // 意思是不对远程文件是否已经存在做判断，强制覆盖。否则会增加一次API调用
-$flysystem = new Filesystem($adapter, new Config([ 'disable_asserts' => true]));
+$flysystem = new Filesystem($adapter, new Config(['disable_asserts' => true]));
 
 // 添加插件 ClientHandlerPlugin 
 // $filesystem->addPlugin(new ClientHandlerPlugin());
