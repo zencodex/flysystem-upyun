@@ -7,9 +7,9 @@
  * 1. 这个包封装的主要目的是给 ZComposer 镜像远程存储使用，如果又拍云接口规则变动，利于快速修复
  * 2. ZComposer 镜像每天在又拍云里维护和同步上百万个文件，对接口调用的要求更为苛刻
  *    如最近刚修复的因upyun/php-sdk并行上传，触发又拍云同名文件上传间隔检测问题，解决方法强制 $config->uploadType = 'BLOCK'
- * 3. ZComposer 需要更多的自定义配置，见 $this->client 中的 config
+ * 3. ZComposer 需要更多的自定义配置，所以灵活性做了重构，见 $this->getClientHandler
  * 
- * ZComposer 镜像已经开源，如果有兴趣可以访问 <https://github.com/zencodex/composer-mirror>
+ * ZComposer 镜像已经开源，如果有兴趣可以访问 [https://github.com/zencodex/composer-mirror](https://github.com/zencodex/composer-mirror)
  */
 ```
 
@@ -33,15 +33,28 @@ $ composer require "zencodex/flysystem-upyun"
 use League\Flysystem\Filesystem;
 use ZenCodex\Support\Flysystem\Adapter\UpyunAdapter
 
-$bucket = 'your-bucket-name';
-$operator = 'oparator-name';
-$password = 'operator-password';
-$domain = 'xxxxx.b0.upaiyun.com'; // 或者 https://xxxx.b0.upaiyun.com
+$config => [
+    'driver'        => 'upyun',
+    'bucket'        => '', // 服务名字
+    'operator'      => '', // 操作员的名字
+    'password'      => '', // 操作员的密码
+    'domain'        => '', // 服务分配的域名
+    'protocol'      => 'https', // 服务使用的协议，如需使用 http，在此配置 http
+];
 
-$adapter = new UpyunAdapter($bucket, $operator, $password, $domain);
-$flysystem = new Filesystem($adapter);
+$adapter = new UpyunAdapter($config);
+// 针对云盘操作，建议添加 disable_asserts
+// 意思是不对远程文件是否已经存在做判断，强制覆盖。否则会增加一次API调用
+$flysystem = new Filesystem($adapter, new Config([ 'disable_asserts' => true]));
+
+// 添加插件 ClientHandlerPlugin 
+// $filesystem->addPlugin(new ClientHandlerPlugin());
+// $client = $filesystem->getClientHandler(); 
+// $client->purge('http://packagist.laravel-china.org/packages.json');
 
 ```
+
+`$client = $filesystem->getClientHandler() 等同于 $client = new Upyun($serviceConfig) `，更多参考  https://github.com/upyun/php-sdk
 
 ## 2. 在 Laravel 中使用
 

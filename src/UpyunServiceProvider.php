@@ -2,6 +2,7 @@
 
 namespace ZenCodex\Support\Flysystem;
 
+use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
@@ -19,7 +20,7 @@ class UpyunServiceProvider extends ServiceProvider
     {
         Storage::extend('upyun', function ($app, $config) {
             $adapter = new UpyunAdapter((object)$config);
-            $filesystem = new Filesystem($adapter);
+            $filesystem = new Filesystem($adapter, new Config(['disable_asserts' => true]));
             $filesystem->addPlugin(new ImagePreviewPlugin());
             return $filesystem;
         });

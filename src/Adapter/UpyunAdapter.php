@@ -266,7 +266,7 @@ class UpyunAdapter extends AbstractAdapter
     {
 
         return (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) ? $path : $this->normalizeHost
-            ($this->domain).$path;
+            ($this->config->domain).$path;
     }
 
     /**
@@ -315,7 +315,7 @@ class UpyunAdapter extends AbstractAdapter
     protected function normalizeHost($domain)
     {
         if (0 !== stripos($domain, 'https://') && 0 !== stripos($domain, 'http://')) {
-            $domain = $this->protocol."://{$domain}";
+            $domain = $this->config->protocol."://{$domain}";
         }
 
         return rtrim($domain, '/').'/';
