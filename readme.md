@@ -1,3 +1,9 @@
+[![Latest Stable Version](https://poser.pugx.org/zencodex/flysystem-upyun/v/stable)](https://packagist.org/packages/zencodex/flysystem-upyun)
+[![Total Downloads](https://poser.pugx.org/zencodex/flysystem-upyun/downloads)](https://packagist.org/packages/zencodex/flysystem-upyun)
+[![Latest Unstable Version](https://poser.pugx.org/zencodex/flysystem-upyun/v/unstable)](https://packagist.org/packages/zencodex/flysystem-upyun)
+[![composer.lock](https://poser.pugx.org/zencodex/flysystem-upyun/composerlock)](https://packagist.org/packages/zencodex/flysystem-upyun)
+[![License](https://poser.pugx.org/zencodex/flysystem-upyun/license)](https://packagist.org/packages/zencodex/flysystem-upyun)
+
 ```php
 /**
  * Adapter 实现 参考「jellybool/flysystem-upyun」
