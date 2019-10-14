@@ -21,5 +21,12 @@
         "psr-4": {
             "ZenCodex\\Support\\Flysystem\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ZenCodex\\Support\\Flysystem\\UpyunServiceProvider"
+            ]
+        }
     }
 }
