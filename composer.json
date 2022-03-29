@@ -4,7 +4,7 @@
     "keywords": ["flysystem", "upyun", "又拍云"],
     "require": {
         "upyun/sdk": "^3.3",
-        "league/flysystem": "^1.0"
+        "league/flysystem": "^1.1.4"
     },
     "support": {
         "issues": "https://github.com/zencodex/flysystem-upyun/issues",
