@@ -3,8 +3,8 @@
     "description": "Upyun flysystem adapter",
     "keywords": ["flysystem", "upyun", "又拍云"],
     "require": {
-        "upyun/sdk": "^3.3",
-        "league/flysystem": "^1.1.4"
+        "alapi/upyun-sdk": "^4.0",
+        "league/flysystem": "^3.0"
     },
     "support": {
         "issues": "https://github.com/zencodex/flysystem-upyun/issues",
