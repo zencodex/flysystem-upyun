@@ -4,20 +4,7 @@
 [![composer.lock](https://poser.pugx.org/zencodex/flysystem-upyun/composerlock)](https://packagist.org/packages/zencodex/flysystem-upyun)
 [![License](https://poser.pugx.org/zencodex/flysystem-upyun/license)](https://packagist.org/packages/zencodex/flysystem-upyun)
 
-```php
-/**
- * Adapter 实现 参考「jellybool/flysystem-upyun」
- * 
- * 为啥要重造这个轮子：
- * 
- * 1. 这个包封装的主要目的是给 ZComposer 镜像远程存储使用，如果又拍云接口规则变动，利于快速修复
- * 2. ZComposer 镜像每天在又拍云里维护和同步上百万个文件，对接口调用的要求更为苛刻
- *    如最近刚修复的因upyun/php-sdk并行上传，触发又拍云同名文件上传间隔检测问题，解决方法强制 $config->uploadType = 'BLOCK'
- * 3. ZComposer 需要更多的自定义配置，所以灵活性做了重构，见 $this->getClientHandler
- * 
- * ZComposer 镜像已经开源，如果有兴趣可以访问 https://github.com/zencodex/composer-mirror
- */
-```
+> 已支持到 php >= 8.2, laravel 10.x
 
 # Requirement
 
