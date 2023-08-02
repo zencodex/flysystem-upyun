@@ -35,19 +35,33 @@ $config => [
     'protocol'      => 'https', // 服务使用的协议，如需使用 http，在此配置 http
 ];
 
-$adapter = new UpyunAdapter($config);
-// 针对云盘操作，建议添加 disable_asserts
-// 意思是不对远程文件是否已经存在做判断，强制覆盖。否则会增加一次API调用
-$flysystem = new Filesystem($adapter, new Config(['disable_asserts' => true]));
+$adapter = new UpyunAdapter((object)$config);
 
-// 添加插件 ClientHandlerPlugin 
-// $filesystem->addPlugin(new ClientHandlerPlugin());
-// $client = $filesystem->getClientHandler(); 
-// $client->purge('http://packagist.laravel-china.org/packages.json');
+// 或在 Laravel 中获取 $adapter
+$adapter = Storage::disk('upyun')->getAdapter();
 
+$adapter->write('file.md', 'contents');
+$adapter->writeStream('file.md', fopen('path/to/your/local/file.jpg', 'r'));
+
+$adapter->rename('foo.md', 'bar.md');
+$adapter->copy('foo.md', 'foo2.md');
+$adapter->delete('file.md');
+$adapter->getUrl('/path/foo/bar/file.md');
+
+$adapter->fileExists('file.md');
+$adapter->directoryExists('path/to/dir');
+$adapter->read('file.md');
+
+// ...
+// $adapter 详细调用方法可参考: src/Adapter/UpyunAdapter.php
+
+// $clientHandler 为 Upyun::class, 直接调用 Upyun 内的方法
+$clientHandler = $adapter->getClientHandler();
+$clientHandler->purge($remoteUrl);
+$clientHandler->usage();
 ```
 
-`$client = $filesystem->getClientHandler() 等同于 $client = new Upyun($serviceConfig) `，更多参考  https://github.com/upyun/php-sdk
+> 
 
 ## 2. 在 Laravel 中使用
 
@@ -78,26 +92,24 @@ $flysystem = new Filesystem($adapter, new Config(['disable_asserts' => true]));
 ]
 ```
 
-# API 和方法调用
+3. Laravel Storage 标准 API 调用
 
 ```php
-$flysystem->read('file.md');
-$flysystem->copy('foo.md', 'foo2.md');
-$flysystem->delete('file.md');
+$disk = Storage::disk('upyun');
 
-$flysystem->has('file.md');
-$flysystem->listContents();
-$flysystem->rename('foo.md', 'bar.md');
+$disk->write('file.md', 'contents');
+$disk->writeStream('file.md', fopen('path/to/your/local/file.jpg', 'r'));
 
-$flysystem->write('file.md', 'contents');
-$flysystem->writeStream('file.md', fopen('path/to/your/local/file.jpg', 'r'));
+$disk->rename('foo.md', 'bar.md');
+$disk->copy('foo.md', 'foo2.md');
+$disk->delete('file.md');
 
-$flysystem->update('file.md', 'new contents');
-$flysystem->updateStram('file.md', fopen('path/to/your/local/file.jpg', 'r'));
+$disk->fileExists('file.md');
+$disk->directoryExists('path/to/dir');
+$disk->read('file.md');
 
-$flysystem->getSize('file.md');
-$flysystem->getMimetype('file.md');
-$flysystem->getTimestamp('file.md');
-$flysystem->getMetadata('file.md');
-$flysystem->getUrl('file.md');
+$disk->listContents();
+$disk->fileSize('file.md');
+$disk->mimeType('file.md');
+$disk->url('/path/foo/bar/file.md');
 ```
