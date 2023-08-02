@@ -65,7 +65,7 @@ $clientHandler->usage();
 
 ## 2. 在 Laravel 中使用
 
-1. `config/app.php` 中添加 `UpyunServiceProvider`:
+1)、`config/app.php` 中添加 `UpyunServiceProvider`:
 
 ```php
 
@@ -75,7 +75,7 @@ $clientHandler->usage();
 ],
 ```
 
-2. `config/filesystems.php` 的 `disks` 中添加下面的配置：
+2)、`config/filesystems.php` 的 `disks` 中添加下面的配置：
 
 ```php
 'disks' => [
@@ -92,7 +92,7 @@ $clientHandler->usage();
 ]
 ```
 
-3. Laravel Storage 标准 API 调用
+3)、Laravel Storage 标准 API 调用
 
 ```php
 $disk = Storage::disk('upyun');
